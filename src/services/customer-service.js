@@ -4,16 +4,7 @@ const { FormateData, GeneratePassword, GenerateSalt, GenerateSignature, Validate
 class CustomerService {
     constructor(){
         this.repository = new CustomerRepository()
-    }
-
-    async SignIn(userInputs){
-        const { email, password, phone } = userInputs 
-        try {
-
-        } catch(err) {
-
-        }
-    }
+    } 
 
     async SignUp(userInputs){
         const { email, password, phone } = userInputs 
@@ -37,7 +28,7 @@ class CustomerService {
         const { email, password } = userInputs
         try { 
             const existingCustomer = await this.repository.FindCustomer({email})
-             
+
             if(existingCustomer){ 
                 const validPassword = await ValidatePassword(password, existingCustomer.password, existingCustomer.salt)
                 
@@ -51,9 +42,27 @@ class CustomerService {
 
         } catch (err) {
             throw new APIError('Data Not found', err)
-        }
+        }  
+    }
 
-       
+    async GetProfile(id){ 
+        try {
+            const existingCustomer = await this.repository.FindCustomerById({id})
+            return FormateData(existingCustomer)
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    }
+
+    async AddNewAddress(_id,userInputs){ 
+        const {street, postalCode, city,country} = userInputs
+        try {
+            const addressResult = await this.repository.CreateAddress({_id, street, postalCode, city,country}) 
+            return FormateData(addressResult);
+            
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        } 
     }
 }
 module.exports = CustomerService

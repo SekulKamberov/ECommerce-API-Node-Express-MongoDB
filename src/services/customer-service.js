@@ -18,7 +18,7 @@ class CustomerService {
     async SignUp(userInputs){
         const { email, password, phone } = userInputs 
         console.log('hi from service-SignUp phone' , phone)
-        
+
         try {
             let salt = await GenerateSalt()
             let userPassword = await GeneratePassword(password, salt)
@@ -30,6 +30,30 @@ class CustomerService {
         } catch(err) {
             throw new APIError('Data Not found', err)
         }
+    }
+
+    async SignIn(userInputs){
+        console.log('SignIn')
+        const { email, password } = userInputs
+        try { 
+            const existingCustomer = await this.repository.FindCustomer({email})
+             
+            if(existingCustomer){ 
+                const validPassword = await ValidatePassword(password, existingCustomer.password, existingCustomer.salt)
+                
+                if(validPassword){
+                    const token = await GenerateSignature({ email: existingCustomer.email, _id: existingCustomer._id})
+                    return FormateData({id: existingCustomer._id, token })
+                } 
+            }
+    
+            return FormateData(null);
+
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+
+       
     }
 }
 module.exports = CustomerService

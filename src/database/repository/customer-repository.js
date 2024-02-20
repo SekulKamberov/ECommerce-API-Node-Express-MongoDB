@@ -32,7 +32,7 @@ class CustomerRepository {
             .populate("wishlist")
             .populate("orders")
             .populate("cart.product")
-            
+
           return existingCustomer
         } catch (err) {
           throw new APIError(
@@ -63,5 +63,20 @@ class CustomerRepository {
           )
         }
     }
+
+    async Wishlist(customerId) {
+        try {
+          const profile = await CustomerModel.findById(customerId)
+            .populate("wishlist")
+    
+          return profile.wishlist
+        } catch (err) {
+          throw new APIError(
+            "API Error",
+            STATUS_CODES.INTERNAL_ERROR,
+            "Unable to Get Wishlist "
+          )
+        }
+      }
 }
 module.exports = CustomerRepository

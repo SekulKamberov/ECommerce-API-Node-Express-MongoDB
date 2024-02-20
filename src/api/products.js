@@ -6,7 +6,7 @@ module.exports = (app) => {
     app.post('/product/create', async(req,res,next) => {
         
         try {
-            const { name, desc, type, unit,price, available, suplier, banner } = req.body 
+            const { name, desc, type, unit, price, available, suplier, banner } = req.body 
             //
             const { data } =  await service.CreateProduct({ 
                 name, desc, type, unit, price, available, suplier, banner 

@@ -64,5 +64,14 @@ class CustomerService {
             throw new APIError('Data Not found', err)
         } 
     }
+
+    async GetWishList(customerId){ 
+        try {
+            const wishListItems = await this.repository.Wishlist(customerId)
+            return FormateData(wishListItems)
+        } catch (err) {
+            throw new APIError('Data Not found', err)           
+        }
+    }
 }
 module.exports = CustomerService

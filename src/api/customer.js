@@ -52,14 +52,25 @@ module.exports = (app) => {
         }
       })
  
-      app.get("/customer/wishlist", UserAuth, async (req, res, next) => {
+    app.get("/customer/wishlist", UserAuth, async (req, res, next) => {
         try {
-          const { _id } = req.user
-          const { data } = await service.GetWishList(_id)
-          
-          return res.status(200).json(data)
+            const { _id } = req.user
+            const { data } = await service.GetWishList(_id)
+
+            return res.status(200).json(data)
         } catch (err) {
-          next(err)
+            next(err)
         }
-      })
+    })
+
+    app.get("/customer/shoping-details", UserAuth, async (req, res, next) => {
+        try {
+            const { _id } = req.user
+            const { data } = await service.GetShopingDetails(_id)
+
+            return res.json(data)
+        } catch (err) {
+            next(err)
+        }
+    })
 }

@@ -73,5 +73,18 @@ class CustomerService {
             throw new APIError('Data Not found', err)           
         }
     }
+
+    async GetShopingDetails(id){ 
+        try {
+            const existingCustomer = await this.repository.FindCustomerById({id}) 
+            if(existingCustomer){
+               return FormateData(existingCustomer)
+            }    
+               
+            return FormateData({ msg: 'Error'}) 
+        } catch (err) {
+            throw new APIError('Data Not found', err)
+        }
+    }
 }
 module.exports = CustomerService

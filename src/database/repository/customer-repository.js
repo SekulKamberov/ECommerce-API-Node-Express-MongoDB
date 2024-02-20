@@ -77,6 +77,24 @@ class CustomerRepository {
             "Unable to Get Wishlist "
           )
         }
-      }
+    }
+
+    async FindCustomerById({ id }) {
+        try { 
+            const existingCustomer = await CustomerModel.findById(id)
+                .populate("address")
+                .populate("wishlist")
+                .populate("orders")
+                .populate("cart.product")
+
+            return existingCustomer
+        } catch (err) {
+          throw new APIError(
+            "API Error",
+            STATUS_CODES.INTERNAL_ERROR,
+            "Unable to Find Customer"
+          )
+        }
+    }
 }
 module.exports = CustomerRepository
